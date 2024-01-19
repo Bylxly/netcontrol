@@ -69,7 +69,7 @@ ping_hosts() {
 
 #installiert bzw. aktualisiert einen crontab 
 install_cron() {
-	crontab -l 2> /dev/null | grep -v "${script_dir}/netcontrol.sh" 2> /dev/null| echo "*$1 * * * * "${script_dir}/netcontrol.sh"" | crontab -
+	(crontab -l 2>/dev/null | grep -v "${script_dir}/netcontrol.sh"; echo "* $1 * * * ${script_dir}/netcontrol.sh") | crontab -
 	echo "Das Skript wird ab jetzt alle "$1" Minuten periodisch ausgeführt!"
 }
 
