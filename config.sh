@@ -8,4 +8,4 @@ timeout=2
 interval=3
 
 # Expertenmodus (genauer ping feedback)
-expert=true
+expert=false
