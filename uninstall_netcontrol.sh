@@ -6,9 +6,9 @@ SCRIPT_PATH="/usr/share/netcontrol"
 sudo rm -f /usr/bin/netcontrol
 
 # Entfernen der Manpages
-sudo rm -f /usr/local/man/man1/netcontrol.1 2>&1 /dev/null
-sudo rm -f /usr/share/man/man1/netcontrol.1 2>&1 /dev/null
-sudo mandb 2>&1 /dev/null
+sudo rm -f /usr/local/man/man1/netcontrol.1 &> /dev/null
+sudo rm -f /usr/share/man/man1/netcontrol.1 &> /dev/null
+sudo mandb &> /dev/null
 
 # Entfernen des Crontab-Eintrags
 crontab -l | grep -v "${script_dir}/netcontrol.sh" | crontab -
