@@ -1,14 +1,12 @@
 #!/bin/bash
 
-# Ort des Hauptskripts
-
 # Entfernen des symbolischen Links
 sudo rm -f /usr/bin/netcontrol
 
 # Entfernen der Manpages
-sudo rm -f /usr/local/man/man1/netcontrol.1
-sudo rm -f /usr/share/man/man1/netcontrol.1
-sudo mandb
+sudo rm -f /usr/local/man/man1/netcontrol.1 2> /dev/null
+sudo rm -f /usr/share/man/man1/netcontrol.1 2> /dev/null
+sudo mandb 1> /dev/null
 
 # Entfernen des Crontab-Eintrags
 (crontab -l | grep -v "netcontrol.sh") | crontab -
@@ -16,6 +14,7 @@ sudo mandb
 # Entfernen des Skripts
 script_dir="$(dirname "$0")"
 sudo rm -f "${script_dir}/netcontrol.sh"
+sudo rm -f "${script_dir}/config.sh"
 sudo rm -f "${script_dir}/install_netcontrol.sh" 2> /dev/null
 
 # Entfernen des Dateien in share
