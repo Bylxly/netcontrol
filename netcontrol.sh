@@ -29,16 +29,22 @@ source "${CONFIG_FILE}"
 add_host() {
 	if ! grep -qx "$1" "$HOSTS_FILE"; then
 		echo "$1" >> "$HOSTS_FILE"
+		echo "$1 hinzugefügt!"
+		
+	else echo "$1 ist schon bereits hinzugefügt!"
 	fi
+	
 }
 
 #entfernt einen host aus der hostfile
 del_host() {
 	grep -v "^$1$" "$HOSTS_FILE" > temp | mv temp "$HOSTS_FILE"
+	echo "$1 entfernt!"
 }
 
 #gibt alle hosts aus
 print_hosts() {
+	echo "--- Liste der Hosts ---"
 	cat "$HOSTS_FILE"
 }
 
@@ -47,15 +53,23 @@ print_hosts() {
 ping_hosts() {
 	
 	while read -r host; do
-		if ! ping -c "$count" -W "$timeout" -i "$interval" "$host" &> /dev/null; then
-			echo "["$(date -Iseconds)"] Der Host $host ist nicht erreichbar!" | tee -a "$LOG_FILE"
+		if [ "$expert" = true ]; then
+			if ! ping -c "$count" -W "$timeout" -i "$interval" "$host" 2> /dev/null; then
+				echo "["$(date -Iseconds)"] Der Host $host ist nicht erreichbar!" | tee -a "$LOG_FILE"
+			fi
+		else
+			if ! ping -c "$count" -W "$timeout" -i "$interval" "$host" &> /dev/null; then
+				echo "["$(date -Iseconds)"] Der Host $host ist nicht erreichbar!" | tee -a "$LOG_FILE"
+			
+			else echo "$host ist erreichbar!"
+			fi
 		fi
 	done < "$HOSTS_FILE"
 }
 
 #installiert bzw. aktualisiert einen crontab 
 install_cron() {
-	(crontab -l 2>/dev/null; echo "*$1 * * * * "${script_dir}/netcontrol.sh"") | crontab -
+	crontab -l 2> /dev/null | grep -v "${script_dir}/netcontrol.sh" 2> /dev/null| echo "*$1 * * * * "${script_dir}/netcontrol.sh"" | crontab -
 }
 
 #entfernt einen crontab
@@ -63,6 +77,15 @@ remove_cron() {
 	crontab -l | grep -v "${script_dir}/netcontrol.sh" | crontab -
 }
 
+#öffnet die config
+config() {
+	nano "${script_dir}/config.sh"
+}
+
+#öffnet die logs
+log() {
+	nano "${script_dir}/log.log"
+}
 case "$1" in
 	addhost)
 		add_host "$2"
@@ -78,6 +101,12 @@ case "$1" in
 	;;
 	uninstall)
 		remove_cron
+	;;
+	config)
+		config
+	;;
+	log)
+		log
 	;;
 	*)
 		ping_hosts
