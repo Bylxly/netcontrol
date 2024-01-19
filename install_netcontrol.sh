@@ -1,7 +1,7 @@
 #installieren der man page
-sudo cp netcontrol.1 /usr/local/man/man1/netcontrol.1 2> /dev/null
-sudo cp netcontrol.1 /usr/share/man/man1/netcontrol.1 2> /dev/null
-sudo mandb 1> /dev/null
+sudo cp netcontrol.1 /usr/local/man/man1/netcontrol.1 2>&1 /dev/null
+sudo cp netcontrol.1 /usr/share/man/man1/netcontrol.1 2>&1 /dev/null
+sudo mandb 2>&1 /dev/null
 rm -f netcontrol.1
 
 #ausführbar machen
