@@ -1,7 +1,7 @@
 #installieren der man page
-sudo cp netcontrol.1 /usr/local/man/man1/netcontrol.1
-sudo cp netcontrol.1 /usr/share/man/man1/netcontrol.1
-sudo mandb
+sudo cp netcontrol.1 /usr/local/man/man1/netcontrol.1 2> /dev/null
+sudo cp netcontrol.1 /usr/share/man/man1/netcontrol.1 2> /dev/null
+sudo mandb 1> /dev/null
 rm -f netcontrol.1
 
 #ausführbar machen
@@ -10,9 +10,9 @@ chmod +x uninstall_netcontrol.sh
 
 #kopieren nach share
 SCRIPT_PATH="/usr/share/netcontrol"
-sudo mkdir "$SCRIPT_PATH"
+sudo mkdir "$SCRIPT_PATH" 2> /dev/null
 sudo cp netcontrol.sh "$SCRIPT_PATH"
-
+sudo mv config.sh "$SCRIPT_PATH"
 sudo chmod -R 777 "$SCRIPT_PATH"
 
 #erstellen des netcontrol links
@@ -22,6 +22,12 @@ sudo chmod +x /usr/bin/netcontrol
 
 #falls user ping nicht ausführen kann
 sudo setcap cap_net_raw+ep /bin/ping
+
+
+
+echo "Installation beendet!"
+echo "Das Script ist unter dem Command netcontrol erreichbar"
+
 
 # Entfernen des installscripts
 script_dir="$(dirname "$0")"
